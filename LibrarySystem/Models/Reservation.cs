@@ -16,8 +16,11 @@ namespace LibrarySystem.Models
         public DateTime ReservationDate { get; set; }
         [DataType(DataType.Time)]
         public DateTime ReservationTime { get; set; }
-        [DataType(DataType.Date)]
         public int Duration { get; set; }
+        [DataType(DataType.Date)]
+        public DateTime ReservationEndDate { get; set; }
+        [DataType(DataType.Time)]
+        public DateTime ReservationEndTime { get; set; }
         
 
         [ForeignKey("MemberID")]

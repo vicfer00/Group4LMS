@@ -41,6 +41,17 @@ namespace LibrarySystem.Data
                 context.Members.Add(c);
             }
             context.SaveChanges();
+
+            //var members = new Member[]
+            //{
+            //new Member{FirstName="Sam",LastName="Chemistry",Email="chemistry.sam@yahoo.com",DOB=DateTime.Today.AddYears(-17),Active="Yes",Password="Unicorns"},
+            //new Member{FirstName="Edwin",LastName="Herrera",Email="herrera.edwin@yahoo.com",DOB=DateTime.Today.AddYears(-28),Active="Yes",Password="P@nth3on"}
+            //};
+            //foreach (Member c in members)
+            //{
+            //    context.Members.Add(c);
+            //}
+            //context.SaveChanges();
         }
 
     }
