@@ -1,0 +1,60 @@
+﻿@model LMS.Models.Reservation
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Reservation</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Room)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Room.ID)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Patron)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Patron.FirstName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ReservationDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ReservationDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ReservationTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ReservationTime)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Duration)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Duration)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ReservationEndDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ReservationEndDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ReservationEndTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ReservationEndTime)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
