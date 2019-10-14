@@ -1,0 +1,71 @@
+﻿@model IEnumerable<LibrarySystem.Models.Reservation>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ReservationDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReservationTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Duration)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReservationEndDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReservationEndTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Members)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rooms)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReservationDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReservationTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Duration)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReservationEndDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReservationEndTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Members.Active)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Rooms.Available)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ReservationID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ReservationID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ReservationID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
