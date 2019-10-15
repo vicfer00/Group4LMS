@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LMS.Data;
 using LMS.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LMS.Controllers
 {
@@ -20,6 +21,7 @@ namespace LMS.Controllers
         }
 
         // GET: Checkouts
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Checkout.Include(c => c.Book)
@@ -54,21 +56,40 @@ namespace LMS.Controllers
             //{
             //    return NotFound();
             //}
-
             //var book = _context.Book.Find(id);
             //if (book == null)
             //{
             //    return NotFound();
             //}
-
-            //var checkout = new Checkout { BookID = book.ID, BorrowDate = DateTime.Today, Book = book };
+            //var checkout = new Checkout { BookID = book.ID, Book = book };
             //ViewData["PatronID"] = new SelectList(_context.Patron, "ID", "FullName");
             //ViewData["BookID"] = new SelectList(_context.Book, "ID", "Title");
             //return View(checkout);
+            var checkedout = from c in _context.Checkout
+                             join b in _context.Book
+                             on c.BookID equals b.ID
+                             where c.DateReturned == null
+                             select new
+                             {
+                                 b.ID,
+                                 b.Title
+                             };
 
-            ViewData["BookID"] = new SelectList(_context.Book, "ID", "Title");
+            var available = from b in _context.Book
+                            select new
+                            {
+                                b.ID,
+                                b.Title
+                            };
+            
+            var result = available.Except(checkedout);
+            
+
+            var checkout = new Checkout { BorrowDate = DateTime.Today };
+            ViewData["BookID"] = new SelectList(result, "ID", "Title");
             ViewData["PatronID"] = new SelectList(_context.Patron, "ID", "FullName");
-            return View();
+
+            return View(checkout);
         }
 
         // POST: Checkouts/Create
@@ -76,7 +97,7 @@ namespace LMS.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,BookID,PatronID,BorrowDate,ReturnDate")] Checkout checkout)
+        public async Task<IActionResult> Create([Bind("ID,BookID,PatronID,BorrowDate,ReturnDate,DateReturned")] Checkout checkout)
         {
             //if (ModelState.IsValid)
             //{
@@ -125,7 +146,7 @@ namespace LMS.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,BookID,PatronID,BorrowDate,ReturnDate")] Checkout checkout)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,BookID,PatronID,BorrowDate,ReturnDate,DateReturned")] Checkout checkout)
         {
             if (id != checkout.ID)
             {

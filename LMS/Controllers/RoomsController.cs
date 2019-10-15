@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LMS.Data;
 using LMS.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LMS.Controllers
 {
@@ -20,6 +21,7 @@ namespace LMS.Controllers
         }
 
         // GET: Rooms
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Room.ToListAsync());

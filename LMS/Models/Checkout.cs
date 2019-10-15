@@ -17,10 +17,12 @@ namespace LMS.Models
         [Required, Display(Name = "Patron")]
         public int PatronID { get; set; }
         public Patron Patron { get; set; }
-        [DataType(DataType.Date)]
+        [DataType(DataType.Date),Display(Name ="Borrow Date")]
         public DateTime BorrowDate { get; set; }
-        [DataType(DataType.Date)]
-        public DateTime? ReturnDate { get; set; }
+        [DataType(DataType.Date), Display(Name = "Return Date")]
+        public DateTime ReturnDate { get; set; }
+        [DataType(DataType.Date), Display(Name = "Date Returned")]
+        public DateTime? DateReturned { get; set; }
 
     }
 }

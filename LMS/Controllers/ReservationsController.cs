@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LMS.Data;
 using LMS.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LMS.Controllers
 {
@@ -20,7 +21,9 @@ namespace LMS.Controllers
         }
 
         // GET: Reservations
+        [Authorize]
         public async Task<IActionResult> Index()
+
         {
             var applicationDbContext = _context.Reservation.Include(r => r.Patron).Include(r => r.Room);
             return View(await applicationDbContext.ToListAsync());

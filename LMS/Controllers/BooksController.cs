@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LMS.Data;
 using LMS.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LMS.Controllers
 {
@@ -19,32 +20,51 @@ namespace LMS.Controllers
             _context = context;
         }
 
+
         // GET: Books
-        public async Task<IActionResult> Index()
+        [Authorize]
+        public async Task<IActionResult> Index(string sortOrder,string searchString)
         {
-            //var books = _context.Book.Include(h => h.Checkouts)
-            //    .Select(b => new BookViewModel
-            //    {
-            //        ID = b.ID,
-            //        ISBN = b.ISBN,
-            //        Author = b.Author,
-            //        Publisher = b.Publisher,
-            //        Title = b.Title,
-            //        IsAvailable = !b.Checkouts.Any(h => h.ReturnDate == null)
-            //    }).ToList();
-            //return View(books);
-            //var checkoutbooks = _context.Book.Join(new { })
+            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
+            var books = from b in _context.Book
+                           select b;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                books = books.Where(b => b.Title.Contains(searchString)
+                                       || b.Author.Contains(searchString));
+            }
+            switch (sortOrder)
+            {
+                case "title_desc":
+                    books = books.OrderByDescending(b => b.Title);
+                    break;
+                case "author":
+                    books = books.OrderBy(b => b.Author);
+                    break;
+                case "author_desc":
+                    books = books.OrderByDescending(b =>b.Author );
+                    break;
+                default:
+                    books = books.OrderBy(b => b.Title);
+                    break;
+            }
 
-            //var booksavailable = from b in _context.Book
-            //                     join c in _context.Checkout
-            //                       on b.ID equals c.BookID into ba
-            //                     from c in ba.DefaultIfEmpty()
-            //                     select b;
+            
+            var booksdisplay = books.Include(h => h.Checkouts)
+                .Select(b => new BookViewModel
+                {
+                    ID = b.ID,
+                    Author = b.Author,
+                    Publisher = b.Publisher,
+                    Title = b.Title,
+                    IsAvailable = !b.Checkouts.Any(h => h.DateReturned == null)
+                }).ToList();
 
 
-            //return View(await booksavailable.ToListAsync());
+            return View(booksdisplay);
 
-            return View(await _context.Book.ToListAsync());
+            //return View(await _context.Book.ToListAsync());
         }
 
         // GET: Books/Details/5
